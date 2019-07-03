@@ -39,7 +39,7 @@ public class ImageAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.image, parent, false);
         }
         CustomClass customClass = (CustomClass) getItem(position);
-        ImageView imageView = convertView.findViewById(R.id.imageView);
+        ImageView imageView = convertView.findViewById(R.id.image_view);
         imageView.setImageBitmap(customClass.getImage());
         return convertView;
     }

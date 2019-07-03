@@ -7,13 +7,22 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1001;
@@ -22,51 +31,58 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<CustomClass> list;
     private static final int My_PERMISSION_CODE = 188;
     ImageAdapter imageAdapter;
+    RelativeLayout rl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        rl=findViewById(R.id.relativeLayout);
         btn = findViewById(R.id.capture_btn);
         gridView = findViewById(R.id.gridviewimg);
-
+list = new ArrayList<CustomClass>();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, My_PERMISSION_CODE);
                 }
-                else
+                else {
                     openCamera();
+                    setImage();
+                    TextView tvd=new TextView(getApplicationContext());
+                    tvd.setText(getDateTime());
+                    rl.addView(tvd);
+                }
             }
         });
-        findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setImage();
-            }
-        });
+    }
+
+    private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     private void setImage() {
-        ImageAdapter adapter = new ImageAdapter(this, list);
-        gridView.setAdapter(adapter);
+        imageAdapter = new ImageAdapter(this, list);
+        gridView.setAdapter(imageAdapter);
     }
 
     private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent cameraIntent = new Intent(ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
     @Override
-    public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == My_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "camera permission granted", Toast.LENGTH_SHORT).show();
                 openCamera();
-            } else {
+            }
+            else {
                 Toast.makeText(this, "camera permission denied", Toast.LENGTH_SHORT).show();
             }
         }
