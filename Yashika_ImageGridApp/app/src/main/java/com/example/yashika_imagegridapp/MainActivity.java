@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,20 +35,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rl=findViewById(R.id.relativeLayout);
+        rl = findViewById(R.id.relativeLayout);
         btn = findViewById(R.id.capture_btn);
         gridView = findViewById(R.id.gridviewimg);
-list = new ArrayList<CustomClass>();
+        list = new ArrayList<CustomClass>();
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, My_PERMISSION_CODE);
-                }
-                else {
+                } else {
                     openCamera();
                     setImage();
-                    TextView tvd=new TextView(getApplicationContext());
+                    TextView tvd = new TextView(getApplicationContext());
                     tvd.setText(getDateTime());
                     rl.addView(tvd);
                 }
@@ -81,8 +79,7 @@ list = new ArrayList<CustomClass>();
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "camera permission granted", Toast.LENGTH_SHORT).show();
                 openCamera();
-            }
-            else {
+            } else {
                 Toast.makeText(this, "camera permission denied", Toast.LENGTH_SHORT).show();
             }
         }
