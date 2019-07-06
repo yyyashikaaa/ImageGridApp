@@ -3,14 +3,21 @@ package com.example.yashika_imagegridapp;
 import android.graphics.Bitmap;
 
 public class CustomClass {
-    Bitmap image;
+    Bitmap bitmap;
+    String time;
 
-    public CustomClass(Bitmap image)
-    {
-        this.image=image;
+    public CustomClass(Bitmap image) {
+        this.bitmap = image;
     }
-    public Bitmap getImage()
-    {
-        return image;
+
+    public Bitmap getImage() {
+        return bitmap;
+    }
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public String getTime() {
+        return time;
     }
 }

@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1001;
     Button btn;
     GridView gridView;
+    Bundle bundle;
     ArrayList<CustomClass> list;
     private static final int My_PERMISSION_CODE = 188;
     ImageAdapter imageAdapter;
@@ -60,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                imageAdapter = new ImageAdapter(getApplicationContext(), list);
-                Intent  intent = new Intent(getApplicationContext(), FinalActivity.class);
-                intent.putExtra("ImageID",imageAdapter.getItemId(position));
+                Intent intent = new Intent(getApplicationContext(), FinalActivity.class);
+                intent.putExtra("ImageID", list.get(position).getBitmap());
                 startActivity(intent);
             }
         });
@@ -99,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            bundle=data.getExtras();
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             list.add(new CustomClass(photo));
+            imageAdapter.notifyDataSetChanged();
         }
     }
 }
